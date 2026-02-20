@@ -22,11 +22,17 @@ class device{
         int power;
 
     public:
+    // Setters
         string getName(){ return name; }
         deviceType getType(){ return type; }
         bool getStatus(){ return isOn; }
         int getPower(){ return power; }
-        
+    //Getters
+        void setName(string to){ name = to; }
+        void settype(deviceType to){ type = to; }
+        void setStatus(bool to){ isOn = to; }
+        void setPower(int to){ power = to; }
+
 };
 
 int main(){
