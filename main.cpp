@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <map>
 using namespace std;
 
 enum deviceType{
@@ -46,15 +48,31 @@ class device{
         setStatus(false);
         setPower(power);
         
-        cout << "Device created.";
+        cout << "Device created.\n";
     }
     ~device(){
-        cout << "Device removed.";
+        cout << "Device removed.\n";
     }
 
+    // toString
+    string toString(){
+        map<int, string> typeTitles = {
+            {0, "Light"},
+            {1, "Environment"},
+            {2, "Appliance"},
+            {3, "Display / Audio"},
+            {4, "Communication"},
+            {5, "Security"},
+            {6, "Hub"},
+            {7, "Other"}
+        };
 
+        return "device("+name+", "+typeTitles[type]+", "+to_string(power)+"W , "+ (isOn ? "On" : "Off") + ")\n";
+    }
 };
 
 int main(){
-    cout << "ok\n";
+    device dev("Lamp", light, 5);
+
+    cout << dev.toString();
 }
