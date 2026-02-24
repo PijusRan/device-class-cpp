@@ -153,5 +153,7 @@ int main(){
     D.push_back(new device("device last", other, 0));
     delete(D[3]);
 
+    assert(d1.getN() == 1);
+
     cout << "Tests passed.\n";
 }
