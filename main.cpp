@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include <string>
+#include <sstream>
 #include <map>
 #include <assert.h>
 #include <vector>
@@ -87,7 +87,15 @@ class device{
 
     // --- TOSTRING ---
     string toString(){
-        return "device["+to_string(id)+"]("+name+", "+typeTitles[type]+", "+to_string(power)+"W , "+ (isOn ? "On" : "Off") + ")";
+        stringstream ss;
+
+        ss << "Device[" << id << "]: ";
+        ss << name << ", ";
+        ss << typeTitles[type] << ", ";
+        ss << power << "W, ";
+        ss << (isOn ? "On" : "Off");
+
+        return ss.str();
     }
 };
 unsigned int device::n = 0;
@@ -99,7 +107,7 @@ int main(){
     // --- Unit Tests ---
 
     // Informacija
-    assert(d1.toString() == "device[0](Kitchen Light, Light, 5W , Off)");
+    assert(d1.toString() == "Device[0]: Kitchen Light, Light, 5W, Off");
     assert(d1.getID() == 0);
 
     // Pavadinimas
@@ -134,7 +142,6 @@ int main(){
     for(int i = 1; i <= 3; i++){
         D.push_back(new device("device "+to_string(i), other, 0));
         assert((*D[D.size()-1]).getID() == i);
-        2
     }
     assert(d1.getN() == 4);
     for(int i = 0; i < 3; i++){
@@ -142,6 +149,9 @@ int main(){
     };
     assert(d1.getN() == 1);
 
+    // Patikrint ar id negrizta
+    D.push_back(new device("device last", other, 0));
+    delete(D[3]);
 
     cout << "Tests passed.\n";
 }
