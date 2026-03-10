@@ -18,105 +18,102 @@ enum deviceType{
 
 class Device{
     // --- FIELDS ---
-    private:
-        string name;
-        deviceType type;
-        bool isOn;
+        private:
+            string name;
+                deviceType type;
+            bool isOn;
         int power;
 
-        // Enumeration
-        static unsigned int nextID;
-        static unsigned int n;
+    // Enumeration
+static unsigned int nextID;
+    static unsigned int n;
         unsigned int id;
 
-    // --- CONSTRUCTOR ---
-    private:
-        void init(string name, deviceType type, bool isOn, int power){
-            setName(name);
+            // --- CONSTRUCTOR ---
+                private:
+                    void init(string name, deviceType type, bool isOn, int power){
+                setName(name);
             setType(type);
-            setStatus(false);
-            setPower(power);
+        setStatus(false);
+    setPower(power);
 
-            id = nextID;
-            incN();
+id = nextID;
+    incN();
         }
-    public:
-        Device(string name, deviceType type, int power){
-            init(name, type, false, power);
-        }
-        Device(string name, deviceType type, bool isOn, int power){
-            init(name, type, isOn, power);
-        }
+            public:
+                Device(string name, deviceType type, int power){
+                    init(name, type, false, power);
+                }
+            Device(string name, deviceType type, bool isOn, int power){
+        init(name, type, isOn, power);
+    }
 
-        // --- DESTRUCTOR ---
-        ~Device(){
-            decN();
-        }
+// --- DESTRUCTOR ---
+    ~Device(){
+        decN();
+            }
 
-        // --- GETTERS ---
-        string getName(){
-            return name;
+                // --- GETTERS ---
+            string getName(){
+        return name;
+    }
+deviceType getType(){
+    return type;
         }
-        deviceType getType(){
-            return type;
-        }
-        bool getStatus(){
-            return isOn;
-        }
-        int getPower(){
-            return power;
-        }
+            bool getStatus(){
+                return isOn;
+            }
+    int getPower(){
+return power;
+    }
         unsigned int getID(){
             return id;
-        }
-        unsigned static int getN(){
-            return n;
-        }
+                }
+            unsigned static int getN(){
+        return n;
+    }
 
-    // --- SETTERS ---
+// --- SETTERS ---
     private:
         void incN(){
             n++;
-            nextID++;
-        }
+                nextID++;
+            }
         void decN(){
-            n--;
-        }
+    n--;
+}
 
-    public:
-        void setName(string to){
-            if(!to.empty()){
-                name = to;
-            }
-            else{
-                throw invalid_argument("Name cannot be empty");
-            }
+public:
+    void setName(string to){
+        name = to;
+    }
+void setType(deviceType to){
+    type = to;
         }
-        void setType(deviceType to){
-            type = to;
-        }
-        void setStatus(bool to){
-            isOn = to;
-        }
+    void setStatus(bool to){
+isOn = to;
+    }
         void setPower(int to){
             power = to;
         }
+};
+            unsigned int Device::n = 0;
+            unsigned int Device::nextID = 0;
 
-        // --- TOSTRING ---
-        string toString(){
+class toString{
+    public:
+    static string output(Device d){
             stringstream ss;
 
-            ss << id << " ";
-            ss << name << " ";
-            ss << type << " ";
-            ss << power << " ";
-            ss << isOn;
+            ss << d.getID() << " ";
+            ss << d.getName() << " ";
+            ss << d.getType() << " ";
+            ss << d.getPower() << " ";
+            ss << d.getType();
 
             return ss.str();
-        }
+    }
 };
-unsigned int Device::n = 0;
-unsigned int Device::nextID = 0;
 
 // -----
 
@@ -128,7 +125,7 @@ int main(){
         // --- Unit Tests ---
 
         // General Information
-        assert(d1.toString() == "0 Kitchen Light 0 5 0");
+        assert(toString::output(d1) == "0 Kitchen Light 0 5 0");
         assert(d1.getID() == 0);
 
         // Name test
