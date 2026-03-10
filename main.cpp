@@ -1,12 +1,10 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <map>
 #include <assert.h>
 #include <vector>
 using namespace std;
 
-// Tipai apytiksliai paimti is Xiaomi parduotuves puslapio
 enum deviceType{
     LIGHT,
     ENVIRONMENT,
@@ -19,21 +17,21 @@ enum deviceType{
 };
 
 class Device{
-    // --- LAUKAI ---
+    // --- FIELDS ---
     private:
         string name;
         deviceType type;
         bool isOn;
         int power;
 
-        // Numeracija
+        // Enumeration
         static unsigned int nextID;
         static unsigned int n;
         unsigned int id;
 
     // --- CONSTRUCTOR ---
-    public:
-        Device(string name, deviceType type, int power){
+    private:
+        void init(string name, deviceType type, bool isOn, int power){
             setName(name);
             setType(type);
             setStatus(false);
@@ -42,14 +40,12 @@ class Device{
             id = nextID;
             incN();
         }
+    public:
+        Device(string name, deviceType type, int power){
+            init(name, type, false, power);
+        }
         Device(string name, deviceType type, bool isOn, int power){
-            setName(name);
-            setType(type);
-            setStatus(isOn);
-            setPower(power);
-
-            id = nextID;
-            incN();
+            init(name, type, isOn, power);
         }
 
         // --- DESTRUCTOR ---
@@ -73,7 +69,7 @@ class Device{
         unsigned int getID(){
             return id;
         }
-        unsigned int getN(){
+        unsigned static int getN(){
             return n;
         }
 
@@ -125,58 +121,76 @@ unsigned int Device::nextID = 0;
 // -----
 
 int main(){
-    Device d1 = Device("Kitchen Light", LIGHT, 5);
+    try
+    {
+        Device d1 = Device("Kitchen Light", LIGHT, 5);
 
-    // --- Unit Tests ---
+        // --- Unit Tests ---
 
-    // Informacija
-    assert(d1.toString() == "0 Kitchen Light 0 5 0");
-    assert(d1.getID() == 0);
+        // General Information
+        assert(d1.toString() == "0 Kitchen Light 0 5 0");
+        assert(d1.getID() == 0);
 
-    // Pavadinimas
-    assert(d1.getName() == "Kitchen Light");
-    d1.setName("Kitchen Hub");
-    assert(d1.getName() == "Kitchen Hub");
+        // Name test
+        assert(d1.getName() == "Kitchen Light");
+        d1.setName("Kitchen Hub");
+        assert(d1.getName() == "Kitchen Hub");
 
-    // Tipas
-    assert(d1.getType() == LIGHT);
-    d1.setType(HUB);
-    assert(d1.getType() == HUB);
+        // Type test
+        assert(d1.getType() == LIGHT);
+        d1.setType(HUB);
+        assert(d1.getType() == HUB);
 
-    // Busena
-    assert(d1.getStatus() == false);
-    d1.setStatus(true);
-    assert(d1.getStatus() == true);
+        // Status test
+        assert(d1.getStatus() == false);
+        d1.setStatus(true);
+        assert(d1.getStatus() == true);
 
-    // Galia
-    assert(d1.getPower() == 5);
-    d1.setPower(15);
-    assert(d1.getPower() == 15);
+        // Power test
+        assert(d1.getPower() == 5);
+        d1.setPower(15);
+        assert(d1.getPower() == 15);
 
-    // Validacija
-    try {         
-        d1.setName("");
-    } 
-    catch (invalid_argument e) {}
-    assert(d1.getName() != "");
+        // Validation test
+        try {         
+            d1.setName("");
+        } 
+        catch (invalid_argument e) {}
+        assert(d1.getName() != "");
 
-    // Nauju irengininiu identifikavimas
-    vector<Device*> D;
-    for(int i = 1; i <= 3; i++){
-        D.push_back(new Device("device "+to_string(i), OTHER, 0));
-        assert((*D[D.size()-1]).getID() == i);
+        // New device identification test
+        vector<Device*> D;
+
+        // Create 3 new devices
+        for(int i = 1; i <= 3; i++){
+            D.push_back(new Device("device "+to_string(i), OTHER, 0));
+            // Check their names
+            assert((*D[D.size()-1]).getID() == i);
+        }
+
+        // Check if N decreased
+        assert(d1.getN() == 4);
+
+        // Delete new devices
+        for(int i = 0; i < 3; i++){
+            delete(D[i]);
+        };
+
+        // Check if N decreased
+        assert(d1.getN() == 1);
+
+        // Check if id doesn't decrease
+        D.push_back(new Device("device last", OTHER, 0));
+        delete(D[3]);
+
+        assert(d1.getN() == 1);
+
+        cout << "Tests passed.\n";
     }
-    assert(d1.getN() == 4);
-    for(int i = 0; i < 3; i++){
-        delete(D[i]);
-    };
-    assert(d1.getN() == 1);
+    catch (const exception &e)
+    {
+        cerr << "Unexpected exception thrown!\n";
+    }
 
-    // Patikrint ar id negrizta
-    D.push_back(new Device("device last", OTHER, 0));
-    delete(D[3]);
-
-    assert(d1.getN() == 1);
-
-    cout << "Tests passed.\n";
+    assert(Device::getN() == 0);
 }
